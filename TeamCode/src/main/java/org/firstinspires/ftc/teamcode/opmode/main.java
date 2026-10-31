@@ -13,7 +13,6 @@
 //    DcMotor intake;
 //    DcMotor sorter;
 //    Servo shooterGate;
-//    private Follower follower;
 //
 //
 //    @Override
@@ -21,7 +20,6 @@
 //        intake = hardwareMap.get(DcMotor.class, "intakeMotor");
 //        sorter = hardwareMap.get(DcMotor.class, "sorterMotor");
 //        shooterGate = hardwareMap.get(Servo.class, "shooterGate");
-//        follower = Constants.create(hardwareMap);
 //
 //    }
 //
