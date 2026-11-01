@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.tests;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp
@@ -17,6 +18,10 @@ public class v1Main extends OpMode {
 
     private DcMotor nectarShooter;
 
+    DcMotorEx shooter;
+    double[] P_Kv_Ks = {0.007,0.0003,0.04};
+    int targetVelocity = 1520;
+
     private DcMotor pollenShooter;
 //    Servo shooterGate;
 
@@ -29,14 +34,21 @@ public class v1Main extends OpMode {
         leftBack = hardwareMap.get(DcMotor.class, "leftBack");
         rightFront = hardwareMap.get(DcMotor.class, "rightFront");
         rightBack = hardwareMap.get(DcMotor.class, "rightBack");
-        nectarShooter = hardwareMap.get(DcMotor.class,"nectarShooter");
-        pollenShooter = hardwareMap.get(DcMotor.class,"pollenShooter");
+        shooter = hardwareMap.get(DcMotorEx.class, "shooter");
 //        shooterGate = hardwareMap.get(Servo.class, "shooterGate");
 
     }
 
     @Override
     public void loop() {
+        double velocity = shooter.getVelocity();
+        double error = targetVelocity-velocity;
+        double feedBack = error * P_Kv_Ks[0];
+        double feedForward = P_Kv_Ks[1] * targetVelocity + P_Kv_Ks[2];
+        shooter.setPower(feedBack + feedForward);
+
+        telemetry.addData("Target Velocity: ", targetVelocity);
+        telemetry.addData("Current Velocity: ", velocity);
 
         double max;
         // POV Mode uses left joystick to go forward & strafe, and right joystick to rotate.
@@ -66,10 +78,10 @@ public class v1Main extends OpMode {
 
 
         // Send calculated power to wheels
-        leftFront.setPower(leftFrontPower*1.6);
-        rightFront.setPower(rightFrontPower*1.6);
-        leftBack.setPower(leftBackPower*1.6); // had to fix both backs to drive
-        rightBack.setPower(rightBackPower*1.6);
+        leftFront.setPower(leftFrontPower*1);
+        rightFront.setPower(rightFrontPower*-1);
+        leftBack.setPower(leftBackPower*1); // had to fix both backs to drive
+        rightBack.setPower(rightBackPower*-1);
 
         if(gamepad1.right_trigger > 0){
             intake.setPower(1);
@@ -83,21 +95,21 @@ public class v1Main extends OpMode {
             intake.setPower(0);
             sorter.setPower(0);
         }
-        if(gamepad2.right_trigger > 0){
-            pollenShooter.setPower(1);
-            nectarShooter.setPower(1);
-
-        }
-        if(gamepad2.left_trigger > 0){
-            nectarShooter.setPower(0.75);
-            pollenShooter.setPower(0.75);
-
-        }
-        if(gamepad2.right_trigger == 0 && gamepad2.left_trigger == 0){
-            nectarShooter.setPower(0);
-            pollenShooter.setPower(0);
-
-        }
+//        if(gamepad1.right_trigger > 0){
+//            pollenShooter.setPower(1);
+//            nectarShooter.setPower(1);
+//
+//        }
+//        if(gamepad1.left_trigger > 0){
+//            nectarShooter.setPower(0.75);
+//            pollenShooter.setPower(0.75);
+//
+//        }
+//        if(gamepad1.right_trigger == 0 && gamepad1.left_trigger == 0){
+//            nectarShooter.setPower(0);
+//            pollenShooter.setPower(0);
+//
+//        }
 //        if(gamepad1.aWasPressed()){
 //            shooterGate.setPosition(1);
 //        }

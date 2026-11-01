@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.tests;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import java.util.Arrays;
@@ -10,6 +11,9 @@ import java.util.Arrays;
 public class shootingRanging extends OpMode {
 
     DcMotorEx shooter;
+
+    DcMotor sorter;
+    DcMotor intake;
 
     double[] P_Kv_Ks = {0,0,0};
 
@@ -33,6 +37,8 @@ public class shootingRanging extends OpMode {
     @Override
     public void init() {
         shooter = hardwareMap.get(DcMotorEx.class, "shooter");
+        intake = hardwareMap.get(DcMotor.class, "intake");
+        sorter = hardwareMap.get(DcMotor.class, "sorter");
     }
 
     @Override
@@ -80,6 +86,20 @@ public class shootingRanging extends OpMode {
         if(gamepad2.dpadDownWasPressed()){
             targetVelocity -= targetVelTable[Math.abs(velTableSteps%4)];
         }
+
+        if(gamepad2.left_trigger > 0){
+            sorter.setPower(1);
+            intake.setPower(1);
+        }
+        if(gamepad2.right_trigger > 0){
+            sorter.setPower(-1);
+            intake .setPower(-1);
+        }
+        if(gamepad2.right_trigger > 0 && gamepad2.left_trigger > 0){
+            sorter.setPower(0);
+            intake.setPower(0);
+        }
+
 
         shooter.setPower(feedBack + feedForward);
 
