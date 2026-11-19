@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.pedro;
 
 import com.pedropathing.algorithm.Foresight;
+import com.pedropathing.algorithm.ForesightConfig;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.revhub.drivetrains.Mecanum;
 import com.pedropathing.revhub.drivetrains.MecanumConfig;
@@ -37,4 +38,11 @@ public class Constants {
     });
 
 
+//    public static Follower create(HardwareMap h){
+//        return new Follower(
+//                new PinpointLocalizer(h, localizerConfig),
+//                new Mecanum(h, drivetrainConfig),
+//                new Foresight(fo)
+//        )
+//    }
 }
